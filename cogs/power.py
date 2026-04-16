@@ -282,14 +282,11 @@ class Power(commands.Cog):
             embed.add_field(
                 name="Commands",
                 value=(
-                    "`.power add @user <amount>` — Add power
-"
-                    "`.power set @user <amount>` — Set power
-"
-                    "`.power remove @user <amount>` — Remove power
-"
-                    "`.power reset @user` — Reset to 0"
-                ),
+    "`.power add @user <amount>` — Add power\n"
+    "`.power set @user <amount>` — Set power\n"
+    "`.power remove @user <amount>` — Remove power\n"
+    "`.power reset @user` — Reset to 0"
+),
                 inline=False
             )
             return await ctx.send(embed=embed)
