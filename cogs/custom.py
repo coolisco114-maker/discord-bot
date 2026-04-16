@@ -211,7 +211,7 @@ class Custom(commands.Cog):
                 "`.hugs <@user>` — Send a hug gif to someone"
             ),
             inline=False
-
+        )
         embed.set_footer(text=f"Requested by {ctx.author.display_name}")
         await ctx.send(embed=embed)
 
