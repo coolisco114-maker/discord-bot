@@ -296,9 +296,9 @@ class Power(commands.Cog):
             user_data = self._get_user_data(ctx.guild.id, member.id)
             old_power = user_data["xp"]
             collection.update_one(
-    {"guild_id": str(ctx.guild.id), "user_id": str(member.id)},
-    {"$set": {"xp": 0}}
-)
+                {"guild_id": str(ctx.guild.id), "user_id": str(member.id)},
+                {"$set": {"xp": 0}}
+            )
             
             embed = discord.Embed(
                 description=f"✅ Reset **{member.display_name}**'s power level!",
