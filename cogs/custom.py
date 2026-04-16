@@ -211,20 +211,6 @@ class Custom(commands.Cog):
                 "`.hugs <@user>` — Send a hug gif to someone"
             ),
             inline=False
-        )
-
-        embed.add_field(
-            name="⚡ Power System",
-            value=(
-                "`.pbase` — Show your base power level\n"
-                "`.psoldier` — Soldier power (2x, requires role)\n"
-                "`.pwarrior` — Warrior power (5x, requires role)\n"
-                "`.pjisamurai` — Ji-Samurai power (8x, requires role)\n"
-                "`.psamurai` — Samurai power (10x, requires role)\n"
-                "*Gain 20 XP per message (15s cooldown)*"
-            ),
-            inline=False
-        )
 
         embed.set_footer(text=f"Requested by {ctx.author.display_name}")
         await ctx.send(embed=embed)
