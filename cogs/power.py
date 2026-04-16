@@ -300,7 +300,6 @@ def _add_xp(self, guild_id, user_id, amount):
             user_data = self._get_user_data(ctx.guild.id, member.id)
             old_power = user_data["xp"]
             user_data["xp"] = 0
-            self._save()
             
             embed = discord.Embed(
                 description=f"✅ Reset **{member.display_name}**'s power level!",
@@ -338,7 +337,6 @@ def _add_xp(self, guild_id, user_id, amount):
         else:
             return await ctx.send(f"❌ Invalid action! Use: `add`, `set`, `remove`, or `reset`")
         
-        self._save()
         new_power = user_data["xp"]
         
         embed = discord.Embed(
