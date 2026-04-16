@@ -115,10 +115,6 @@ def _add_xp(self, guild_id, user_id, amount):
         if message.author.bot or not message.guild:
             return
         
-        # Ignore command messages
-        if message.content.startswith("."):
-            return
-        
         user_data = self._get_user_data(message.guild.id, message.author.id)
         current_time = time.time()
         
