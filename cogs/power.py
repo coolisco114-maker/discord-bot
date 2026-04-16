@@ -262,7 +262,7 @@ class Power(commands.Cog):
         embed.set_footer(text=f"Base: {base_power:,} × {ROLE_MULTIPLIERS['Samurai']} (Samurai)")
         await ctx.send(embed=embed)
         
-    @commands.command(name=\"power\")
+    @commands.command(name="power")
     @commands.has_permissions(manage_messages=True)
     async def power_manage(self, ctx, action: str = None, member: discord.Member = None, value: int = None):
         \"\"\"Manage user power levels (Admin only).
