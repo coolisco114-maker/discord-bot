@@ -6,7 +6,7 @@ import os
 import time
 from datetime import datetime, timezone
 
-POWER_FILE = os.path.join(os.path.dirname(__file__), "..", "data", "power.json")
+
 TENOR_API = "https://api.tenor.com/v1/gifs?ids={id}&key=LIVDSRZULELA&media_filter=minimal"
 
 # GIF IDs for each power tier
@@ -37,27 +37,8 @@ class Power(commands.Cog):
 
     def __init__(self, bot):
         self.bot = bot
-        self.power_data = self._load()
+        self.power_data = None
         self._gif_cache = {}
-
-    def _load(self):
-        """Load power data from JSON file."""
-        try:
-            if os.path.exists(POWER_FILE):
-                with open(POWER_FILE, "r") as f:
-                    return json.load(f)
-        except Exception as e:
-            print(f"[Power] Failed to load power data: {e}")
-        return {}
-
-    def _save(self):
-        """Save power data to JSON file."""
-        try:
-            os.makedirs(os.path.dirname(POWER_FILE), exist_ok=True)
-            with open(POWER_FILE, "w") as f:
-                json.dump(self.power_data, f, indent=2)
-        except Exception as e:
-            print(f"[Power] Failed to save power data: {e}")
 
     def _get_user_data(self, guild_id, user_id):
         """Get user's power data."""
