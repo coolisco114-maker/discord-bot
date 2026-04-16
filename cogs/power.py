@@ -261,7 +261,99 @@ class Power(commands.Cog):
         
         embed.set_footer(text=f"Base: {base_power:,} × {ROLE_MULTIPLIERS['Samurai']} (Samurai)")
         await ctx.send(embed=embed)
-
+    @commands.command(name=\"power\")
+    @commands.has_permissions(manage_messages=True)
+    async def power_manage(self, ctx, action: str = None, member: discord.Member = None, value: int = None):
+        \"\"\"Manage user power levels (Admin only).
+        
+        Usage:
+        .power add @user <amount> - Add power to a user
+        .power set @user <amount> - Set user's power to a specific value
+        .power remove @user <amount> - Remove power from a user
+        .power reset @user - Reset user's power to 0
+        \"\"\"
+        if not action:
+            embed = discord.Embed(
+                title=\"⚡ Power Management\",
+                description=\"Admin commands for managing user power levels.\",
+                color=discord.Color.gold()
+            )
+            embed.add_field(
+                name=\"Commands\",
+                value=(
+                    \"`.power add @user <amount>` — Add power
+\"
+                    \"`.power set @user <amount>` — Set power
+\"
+                    \"`.power remove @user <amount>` — Remove power
+\"
+                    \"`.power reset @user` — Reset to 0\"
+                ),
+                inline=False
+            )
+            return await ctx.send(embed=embed)
+        
+        action = action.lower()
+        
+        if action == \"reset\":
+            if not member:
+                return await ctx.send(\"❌ Please mention a user! Usage: `.power reset @user`\")
+            
+            user_data = self._get_user_data(ctx.guild.id, member.id)
+            old_power = user_data[\"xp\"]
+            user_data[\"xp\"] = 0
+            self._save()
+            
+            embed = discord.Embed(
+                description=f\"✅ Reset **{member.display_name}**'s power level!\",
+                color=discord.Color.green()
+            )
+            embed.add_field(name=\"Previous Power\", value=f\"{old_power:,}\")
+            embed.add_field(name=\"New Power\", value=\"0\")
+            embed.set_footer(text=f\"Reset by {ctx.author.display_name}\")
+            return await ctx.send(embed=embed)
+        
+        if not member:
+            return await ctx.send(f\"❌ Please mention a user! Usage: `.power {action} @user <amount>`\")
+        
+        if value is None:
+            return await ctx.send(f\"❌ Please provide an amount! Usage: `.power {action} @user <amount>`\")
+        
+        if value < 0:
+            return await ctx.send(\"❌ Amount must be positive!\")
+        
+        user_data = self._get_user_data(ctx.guild.id, member.id)
+        old_power = user_data[\"xp\"]
+        
+        if action == \"add\":
+            user_data[\"xp\"] += value
+            action_text = \"Added\"
+            change = f\"+{value:,}\"
+        elif action == \"set\":
+            user_data[\"xp\"] = value
+            action_text = \"Set\"
+            change = f\"={value:,}\"
+        elif action == \"remove\":
+            user_data[\"xp\"] = max(0, user_data[\"xp\"] - value)
+            action_text = \"Removed\"
+            change = f\"-{value:,}\"
+        else:
+            return await ctx.send(f\"❌ Invalid action! Use: `add`, `set`, `remove`, or `reset`\")
+        
+        self._save()
+        new_power = user_data[\"xp\"]
+        
+        embed = discord.Embed(
+            description=f\"✅ {action_text} power for **{member.display_name}**!\",
+            color=discord.Color.green()
+        )
+        embed.set_thumbnail(url=member.display_avatar.url)
+        embed.add_field(name=\"Previous Power\", value=f\"{old_power:,}\")
+        embed.add_field(name=\"Change\", value=change)
+        embed.add_field(name=\"New Power\", value=f\"{new_power:,}\")
+        embed.set_footer(text=f\"Modified by {ctx.author.display_name}\")
+        
+        await ctx.send(embed=embed)
 
 async def setup(bot):
     await bot.add_cog(Power(bot))
