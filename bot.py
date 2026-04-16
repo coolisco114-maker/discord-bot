@@ -38,6 +38,7 @@ async def main():
         await bot.load_extension("cogs.moderation")
         await bot.load_extension("cogs.custom")
         await bot.load_extension("cogs.quote")
+        await bot.load_extension("cogs.power")
         token = os.getenv("DISCORD_TOKEN")
         if not token:
             raise ValueError("DISCORD_TOKEN environment variable not set.")
