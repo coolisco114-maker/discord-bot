@@ -194,8 +194,9 @@ class Custom(commands.Cog):
                 "`.clearwarns <user>` — Clear all cases for a member"
             ),
             inline=False
-        )
 
+            )
+        
         embed.add_field(
             name="🔧 Utility",
             value=(
@@ -208,6 +209,19 @@ class Custom(commands.Cog):
                 "`.say <message>` — Make the bot speak\n"
                 "`.quote [text]` — Turn a message into a quote card\n"
                 "`.hugs <@user>` — Send a hug gif to someone"
+            ),
+            inline=False
+        )
+
+        embed.add_field(
+            name="⚡ Power System",
+            value=(
+                "`.pbase` — Show your base power level\n"
+                "`.psoldier` — Soldier power (2x, requires role)\n"
+                "`.pwarrior` — Warrior power (5x, requires role)\n"
+                "`.pjisamurai` — Ji-Samurai power (8x, requires role)\n"
+                "`.psamurai` — Samurai power (10x, requires role)\n"
+                "*Gain 20 XP per message (15s cooldown)*"
             ),
             inline=False
         )
