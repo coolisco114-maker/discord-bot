@@ -39,49 +39,47 @@ COOLDOWN_SECONDS = 15
 
 
 class Power(commands.Cog):
-    """Power level system based on message activity."""
-
     def __init__(self, bot):
         self.bot = bot
         self.power_data = None
         self._gif_cache = {}
 
-def _get_user_data(self, guild_id, user_id):
-    data = collection.find_one({
-        "guild_id": str(guild_id),
-        "user_id": str(user_id)
-    })
-    
-    if not data:
-        data = {
-            "guild_id": str(guild_id),
-            "user_id": str(user_id),
-            "xp": 0,
-            "last_message": 0
-        }
-        collection.insert_one(data)
-    
-    return data
-
-def _add_xp(self, guild_id, user_id, amount):
-    user = self._get_user_data(guild_id, user_id)
-    
-    new_xp = user["xp"] + amount
-    
-    collection.update_one(
-        {
+    def _get_user_data(self, guild_id, user_id):
+        data = collection.find_one({
             "guild_id": str(guild_id),
             "user_id": str(user_id)
-        },
-        {
-            "$set": {
-                "xp": new_xp,
-                "last_message": time.time()
+        })
+        
+        if not data:
+            data = {
+                "guild_id": str(guild_id),
+                "user_id": str(user_id),
+                "xp": 0,
+                "last_message": 0
             }
-        }
-    )
-    
-    return new_xp
+            collection.insert_one(data)
+        
+        return data
+
+    def _add_xp(self, guild_id, user_id, amount):
+        user = self._get_user_data(guild_id, user_id)
+        
+        new_xp = user["xp"] + amount
+        
+        collection.update_one(
+            {
+                "guild_id": str(guild_id),
+                "user_id": str(user_id)
+            },
+            {
+                "$set": {
+                    "xp": new_xp,
+                    "last_message": time.time()
+                }
+            }
+        )
+        
+        return new_xp
 
     async def _get_gif_url(self, gif_id: str) -> str | None:
         """Fetch and cache the direct GIF URL from Tenor's API."""
