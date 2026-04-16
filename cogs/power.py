@@ -126,6 +126,8 @@ def _add_xp(self, guild_id, user_id, amount):
         if current_time - user_data["last_message"] >= COOLDOWN_SECONDS:
             self._add_xp(message.guild.id, message.author.id, XP_PER_MESSAGE)
 
+        await self.bot.process_commands(message)
+
     @commands.command()
     async def pbase(self, ctx):
         """Show your base power level."""
