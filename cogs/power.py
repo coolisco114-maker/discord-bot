@@ -46,29 +46,42 @@ class Power(commands.Cog):
         self.power_data = None
         self._gif_cache = {}
 
-    def _get_user_data(self, guild_id, user_id):
-        """Get user's power data."""
-        guild_id = str(guild_id)
-        user_id = str(user_id)
-        
-        if guild_id not in self.power_data:
-            self.power_data[guild_id] = {}
-        
-        if user_id not in self.power_data[guild_id]:
-            self.power_data[guild_id][user_id] = {
-                "xp": 0,
-                "last_message": 0
-            }
-        
-        return self.power_data[guild_id][user_id]
+def _get_user_data(self, guild_id, user_id):
+    data = collection.find_one({
+        "guild_id": str(guild_id),
+        "user_id": str(user_id)
+    })
+    
+    if not data:
+        data = {
+            "guild_id": str(guild_id),
+            "user_id": str(user_id),
+            "xp": 0,
+            "last_message": 0
+        }
+        collection.insert_one(data)
+    
+    return data
 
-    def _add_xp(self, guild_id, user_id, amount):
-        """Add XP to a user."""
-        user_data = self._get_user_data(guild_id, user_id)
-        user_data["xp"] += amount
-        user_data["last_message"] = time.time()
-        self._save()
-        return user_data["xp"]
+def _add_xp(self, guild_id, user_id, amount):
+    user = self._get_user_data(guild_id, user_id)
+    
+    new_xp = user["xp"] + amount
+    
+    collection.update_one(
+        {
+            "guild_id": str(guild_id),
+            "user_id": str(user_id)
+        },
+        {
+            "$set": {
+                "xp": new_xp,
+                "last_message": time.time()
+            }
+        }
+    )
+    
+    return new_xp
 
     async def _get_gif_url(self, gif_id: str) -> str | None:
         """Fetch and cache the direct GIF URL from Tenor's API."""
