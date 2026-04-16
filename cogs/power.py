@@ -6,6 +6,12 @@ import os
 import time
 from datetime import datetime, timezone
 
+from pymongo import MongoClient
+
+client = MongoClient(os.getenv("MONGO_URI"))
+db = client["discord_bot"]
+collection = db["power"]
+
 
 TENOR_API = "https://api.tenor.com/v1/gifs?ids={id}&key=LIVDSRZULELA&media_filter=minimal"
 
